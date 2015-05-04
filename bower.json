@@ -1,0 +1,11 @@
+{
+  "name": "gym",
+  "private": "true",
+  "devDependencies": {
+    "ionic": "driftyco/ionic-bower#1.0.0-rc.5"
+  },
+  "dependencies": {
+    "angularjs-geolocation": "~0.1.1",
+    "angular-baidu-map": "~1.1.1"
+  }
+}
