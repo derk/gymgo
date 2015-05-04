@@ -1,9 +1,6 @@
 <ion-view view-title="Account">
   <ion-content>
-    <ion-list>
-    <ion-toggle  ng-model="settings.enableFriends">
-        Enable Friends
-    </ion-toggle>
-    </ion-list>
+    <baidu-map options="mapOptions" style="display: block; height:inherit"
+	points='gymlist' center='curloc'></baidu-map>
   </ion-content>
 </ion-view>
