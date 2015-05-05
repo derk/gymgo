@@ -1,4 +1,4 @@
-angular.module('starter.controllers', ["baiduMap", 'geolocation'])
+angular.module('starter.controllers', ["baiduMap"])
 
 .controller('DashCtrl', function($scope) {
     $scope.updates = [{
@@ -18,35 +18,34 @@ angular.module('starter.controllers', ["baiduMap", 'geolocation'])
 .controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
     $scope.chat = Chats.get($stateParams.chatId);
 })
+.controller('GymDetailCtrl',function($scope,$stateParams, GymData){
+    $scope.gymid = $stateParams.gymId;
+	GymData.getgymddetail($scope.gymid, function(data){
+		console.log(JSON.stringify(data));
+	});
+})
 
-.controller('AccountCtrl', ['$scope', '$http', 'geolocation',
-    function($scope, $http, geolocation) {
+.controller('AccountCtrl', ['$scope', '$http', 'Geo',
+    function($scope, $http, Geo) {
 
-        var url = 'http://localhost:1337/gym/nearby';
 		var longitude = 116.43183;
 		var latitude = 39.99274;
+
         $scope.gymlist = [];
 		$scope.curloc = undefined;
-
-        geolocation.getLocation().then(function(data) {
-            latitude  = data.coords.latitude;
-            longitude = data.coords.longitude;
-			alert(longitude + "," + latitude);
-			$scope.curloc = {latitude: latitude, longitude:longitude};
-            $http.post(url, $scope.curloc)
-                .success(function(data, status) {
-                    $scope.gymlist = data;
-                })
-                .error(function(data, status) {});
-        });
-
+		Geo.getloc(function(loc){
+			$scope.curloc = loc;
+		});
+		Geo.nearby(function(gymlist){
+			$scope.gymlist = gymlist;
+		});
         $scope.mapOptions = {
             center: {
                 longitude: longitude,
                 latitude: latitude
             },
             zoom: 17,
-            city: 'ShangHai',
+            city: 'Beijing',
             markers: []
         };
     }
