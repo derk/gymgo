@@ -16,37 +16,56 @@ angular.module('starter.controllers', ["baiduMap"])
 })
 
 .controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
-    $scope.chat = Chats.get($stateParams.chatId);
-})
-.controller('GymDetailCtrl',function($scope,$stateParams, GymData){
-    $scope.gymid = $stateParams.gymId;
-	GymData.getgymddetail($scope.gymid, function(data){
-		console.log(JSON.stringify(data));
-	});
-})
+        $scope.chat = Chats.get($stateParams.chatId);
+    })
+    .controller('GymDetailCtrl', function($scope, $stateParams, GymData) {
+        $scope.gymid = $stateParams.gymId;
+        GymData.getgymddetail($scope.gymid, function(data) {
+            console.log(JSON.stringify(data));
+        });
+    })
 
-.controller('AccountCtrl', ['$scope', '$http', 'Geo',
-    function($scope, $http, Geo) {
+.controller('AccountCtrl', ['$scope', '$http', 'Geo','$ionicModal',
+    function($scope, $http, Geo, $ionicModal) {
 
-		var longitude = 116.43183;
-		var latitude = 39.99274;
+        var longitude = 116.43183;
+        var latitude = 39.99274;
 
         $scope.gymlist = [];
-		$scope.curloc = undefined;
-		Geo.getloc(function(loc){
-			$scope.curloc = loc;
-		});
-		Geo.nearby(function(gymlist){
-			$scope.gymlist = gymlist;
-		});
+        $scope.curloc = undefined;
+		$scope.mapmode = false;
+		$scope.toggleDisplayMode = function(){
+			$scope.mapmode = !$scope.mapmode;
+		}
+
+        $ionicModal.fromTemplateUrl('templates/gym-detail.html', {
+            scope: $scope,
+            animation: 'slide-in-up'
+        }).then(function(modal) {
+            $scope.modal = modal;
+        });
+
+        Geo.getloc(function(loc) {
+            $scope.curloc = loc;
+        });
+        Geo.nearby(function(gymlist) {
+            $scope.gymlist = gymlist;
+        });
+        var markerclickaction = function(gym) {
+			if($scope.gym != gym){
+				$scope.gym = gym;
+			}
+            $scope.modal.show();
+        }
         $scope.mapOptions = {
             center: {
                 longitude: longitude,
                 latitude: latitude
             },
-            zoom: 17,
+            zoom: 16,
             city: 'Beijing',
-            markers: []
+            markers: [],
+            markerclick: markerclickaction
         };
     }
 ]);

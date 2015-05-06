@@ -66,8 +66,8 @@
             restrict: 'E',
             scope: {
                 'options': '=',
-				'points': '=points',
-				'center': '=center'
+                'points': '=points',
+                'center': '=center',
             },
             link: function($scope, element, attrs) {
 
@@ -122,53 +122,56 @@
                         this.openInfoWindow(infoWin);
                     };
                 };
-				var moveto = function(longitude, latitude){
-					var pt = new BMap.Point(longitude, latitude);
-					map.panTo(pt);
-					var curmarker = new BMap.Marker(pt);
-					map.addOverlay(curmarker); // 将标注添加到地图中
-				};
-				var addmarker = function(marker){
-					var pt = new BMap.Point(marker.longitude, marker.latitude);
-					var marker2;
-					if (marker.icon) {
-						var icon = new BMap.Icon(marker.icon, new BMap.Size(marker.width, marker.height));
-						marker2 = new BMap.Marker(pt, {
-							icon: icon
-						});
-					} else {
-						marker2 = new BMap.Marker(pt);
-					}
+                var moveto = function(longitude, latitude) {
+                    var pt = new BMap.Point(longitude, latitude);
+                    map.panTo(pt);
+                    var curmarker = new BMap.Marker(pt);
+                    map.addOverlay(curmarker); // 将标注添加到地图中
+                };
+                var addmarker = function(marker) {
+                    var pt = new BMap.Point(marker.longitude, marker.latitude);
+                    var marker2;
+                    if (marker.icon) {
+                        var icon = new BMap.Icon(marker.icon, new BMap.Size(marker.width, marker.height));
+                        marker2 = new BMap.Marker(pt, {
+                            icon: icon
+                        });
+                    } else {
+                        marker2 = new BMap.Marker(pt);
+                    }
 
-					// add marker to the map
-					map.addOverlay(marker2); // 将标注添加到地图中
-
+                    // add marker to the map
+                    map.addOverlay(marker2); // 将标注添加到地图中
+                    /*
 					if (!marker.title && !marker.content) {
 						return;
 					}
 					var infoWindow2 = new BMap.InfoWindow("<p>" + (marker.title ? marker.title : '') + "</p><p>" + (marker.content ? marker.content : '') + "</p>", {
 						enableMessage: !!marker.enableMessage
 					});
-					marker2.addEventListener("click", openInfoWindow(infoWindow2));
-				};
-				for (var i in opts.markers) {
-					addmarker(opts.markers[i]);
-				}
-				$scope.$watchCollection('points', function(n, o) {
-					if(n.length != 0){
-						n.forEach(addmarker);
-					}
-				});
-				$scope.$watchCollection('center', function(n, o) {
-					if(n!= undefined){
-						moveto(n.longitude, n.latitude);
-					}
-				});
-				  },
-			template: '<div style="width: 100%; height: 100%;"></div>'
-		};
-	};
+					*/
+                    marker2.addEventListener("click", function() {
+                        opts.markerclick(marker);
+                    });
+                };
+                for (var i in opts.markers) {
+                    addmarker(opts.markers[i]);
+                }
+                $scope.$watchCollection('points', function(n, o) {
+                    if (n.length != 0) {
+                        n.forEach(addmarker);
+                    }
+                });
+                $scope.$watchCollection('center', function(n, o) {
+                    if (n != undefined) {
+                        moveto(n.longitude, n.latitude);
+                    }
+                });
+            },
+            template: '<div style="width: 100%; height: 100%;"></div>'
+        };
+    };
 
-	var baiduMap = angular.module('baiduMap', []);
-	baiduMap.directive('baiduMap', [baiduMapDir]);
+    var baiduMap = angular.module('baiduMap', []);
+    baiduMap.directive('baiduMap', [baiduMapDir]);
 }));

@@ -1,6 +1,12 @@
-<ion-view view-title="Account">
-  <ion-content>
-    <baidu-map options="mapOptions" style="display: block; height:inherit"
-	points='gymlist' center='curloc'></baidu-map>
-  </ion-content>
+<ion-view view-title="附近">
+    <ion-nav-bar>
+        <ion-nav-buttons side="secondary">
+            <button class="button button-icon" ng-class="mapmode?'ion-ios-list-outline':'ion-ios-location-outline'" ng-click="toggleDisplayMode()"></button>
+        </ion-nav-buttons>
+    </ion-nav-bar>
+
+    <ion-content>
+        <baidu-map options="mapOptions" style="display: block; height:inherit" points='gymlist'
+        center='curloc' markerclick='markerclick'></baidu-map>
+    </ion-content>
 </ion-view>
