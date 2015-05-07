@@ -1,15 +1,29 @@
-<ion-modal-view style="height:70;bottom:0">
+<ion-modal-view>
     <ion-header-bar>
         <div class="button button-clear" ng-click="modal.hide()">
-			<span class="icon ion-ios-arrow-left"></span>
+            <span class="icon ion-ios-arrow-left"></span>
         </div>
         <h1 class="title">{{gym.title}}</h1>
     </ion-header-bar>
-    <ion-content>
-        <ion-slide-box auto-play="true" does-continue="true" on-slide-changed="slideChanged(index)" class="gymdetail-slide">
-          <ion-slide ng-repeat="slide in gym.pics">
-				<img class="gymdetail-slide-item" src="{{slide}}">
-          </ion-slide>
+    <ion-content class="greybg">
+        <ion-slide-box auto-play="true" does-continue="true" on-slide-changed="slideChanged(index)"
+        class="gymdetail-slide">
+            <ion-slide ng-repeat="slide in gym.pics">
+                <img class="gymdetail-slide-item" src="{{slide}}">
+            </ion-slide>
         </ion-slide-box>
+        <div class="card card-info">
+            <div class="item item-text-wrap">
+				地址：{{gym.address}}
+            </div>
+        </div>
+        <div class="list card card-info">
+            <div class="item item-avatar" ng-repeat="coach in gym.coaches">
+                <img
+				ng-src="{{coach.avatar}}">
+				<h2>{{coach.name}}</h2>
+                <p>教练</p>
+            </div>
+        </div>
     </ion-content>
 </ion-modal-view>
