@@ -1,0 +1,16 @@
+<ion-header-bar class="bar-positive">
+    <h1 class="title">Toggles</h1>
+</ion-header-bar>
+<ion-content class="greybg">
+    <ion-slide-box auto-play="true" does-continue="true" on-slide-changed="slideChanged(index)"
+    class="gymdetail-slide">
+        <ion-slide ng-repeat="slide in coach.pics">
+            <img class="gymdetail-slide-item" src="{{slide}}">
+        </ion-slide>
+    </ion-slide-box>
+    <div class="button-bar">
+        <a class="button">First</a>
+        <a class="button">Second</a>
+        <a class="button">Third</a>
+    </div>
+</ion-content>

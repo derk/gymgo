@@ -36,5 +36,8 @@
 	box-shadow: none;
 	border: solid #e1e1e1 1px;
 }
+.loading {
+	background-color: #f3f3f3 !important
+}
 
 

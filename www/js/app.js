@@ -76,7 +76,14 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                 controller: 'AccountCtrl'
             }
         }
-    });
+    })
+
+	.state('coach-detail', {
+		url: '/coach/:id',
+		templateUrl: 'templates/coach-detail.html',
+		controller: 'CoachCtrl'
+	});
+
 
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/tab/dash');

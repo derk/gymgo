@@ -1,14 +1,15 @@
 angular.module('starter.services', ['geolocation'])
-    .factory('GymData', function($http) {
+    .factory('ResourceProvider', function($http) {
+        var host = 'http://localhost:1337/';
         return {
-            getgymddetail: function(gymid, cb) {
-                var url = 'http://localhost:1337/gym/' + gymid;
+            getres: function(restype, resid, successcb, errorcb) {
+                var url = host + restype + "/" + resid;
                 $http.get(url)
-                    .success(function(data) {
-                        cb(data);
+                    .success(function(data, status) {
+                        successcb(data);
                     })
-                    .error(function(data) {
-                        alert(data);
+                    .error(function(data, status) {
+                        errorcb(data);
                     });
             }
         };

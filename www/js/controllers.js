@@ -16,27 +16,46 @@ angular.module('starter.controllers', ["baiduMap"])
 })
 
 .controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
-        $scope.chat = Chats.get($stateParams.chatId);
-    })
-    .controller('GymDetailCtrl', function($scope, $stateParams, GymData) {
-        $scope.gymid = $stateParams.gymId;
-        GymData.getgymddetail($scope.gymid, function(data) {
-            console.log(JSON.stringify(data));
+    $scope.chat = Chats.get($stateParams.chatId);
+})
+
+.controller('GymDetailCtrl', function($scope, $stateParams, ResourceProvider) {
+    $scope.gymid = $stateParams.gymId;
+    ResourceProvider.getres('gym', $scope.gymid, function(data) {
+        console.log(JSON.stringify(data));
+    });
+})
+
+.controller('CoachCtrl', function($scope, $stateParams, ResourceProvider) {
+    $scope.coachid = $stateParams.coachid;
+    //1.get coach detail
+    ResourceProvider.getres('coach', $scope.coachid, function(coach) {
+        $scope.coach = coach;
+		console.log(coach);
+        ResourceProvider.getres('timeline', coach.alias, function(timeline) {
+            $scope.timeline = timeline;
+			console.log(timeline);
         });
-    })
+    });
+})
 
-.controller('AccountCtrl', ['$scope', '$http', 'Geo','$ionicModal',
-    function($scope, $http, Geo, $ionicModal) {
-
+.controller('AccountCtrl', ['$scope', '$http', 'Geo', '$ionicModal', '$ionicLoading',
+    function($scope, $http, Geo, $ionicModal, $ionicLoading) {
         var longitude = 116.43183;
         var latitude = 39.99274;
-
+        $ionicLoading.show({
+            template: '<ion-spinner icon="spiral"></ion-spinner><p style="color:black">定位中</p>',
+            //template: '<ion-spinner icon="dots"></ion-spinner>',
+            hideOnStageChange: true
+        });
         $scope.gymlist = [];
         $scope.curloc = undefined;
-		$scope.mapmode = false;
-		$scope.toggleDisplayMode = function(){
-			$scope.mapmode = !$scope.mapmode;
-		}
+        $scope.mapmode = false;
+        $scope.loaded = false;
+
+        $scope.toggleDisplayMode = function() {
+            $scope.mapmode = !$scope.mapmode;
+        }
 
         $ionicModal.fromTemplateUrl('templates/gym-detail.html', {
             scope: $scope,
@@ -50,11 +69,12 @@ angular.module('starter.controllers', ["baiduMap"])
         });
         Geo.nearby(function(gymlist) {
             $scope.gymlist = gymlist;
+            $ionicLoading.hide();
         });
-        var markerclickaction = function(gym) {
-			if($scope.gym != gym){
-				$scope.gym = gym;
-			}
+        $scope.markerclickaction = function(gym) {
+            if ($scope.gym != gym) {
+                $scope.gym = gym;
+            }
             $scope.modal.show();
         }
         $scope.mapOptions = {
@@ -65,7 +85,7 @@ angular.module('starter.controllers', ["baiduMap"])
             zoom: 16,
             city: 'Beijing',
             markers: [],
-            markerclick: markerclickaction
+            markerclick: $scope.markerclickaction
         };
     }
 ]);
